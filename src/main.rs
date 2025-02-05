@@ -26,13 +26,8 @@ fn main() -> Result<()> {
     let main_sitemap_url = &args[1];
     let debug = args.len() == 3 && args[2] == "--debug";
 
-    let client = reqwest::blocking::Client::builder()
-        .cookie_store(true)
-        .timeout(Duration::from_secs(15))
-        .build()
-        .context("Failed to build HTTP client")?;
     println!("🌐 Fetching main sitemap from {}", main_sitemap_url);
-    let content = fetch_url(&client, main_sitemap_url, debug)?;
+    let content = fetch_url(main_sitemap_url, debug)?;
     
     let mut sitemap_urls = extract_sitemaps(&content, debug)?;
     if sitemap_urls.is_empty() {
@@ -51,7 +46,7 @@ fn main() -> Result<()> {
         if debug {
             println!("[DEBUG] Processing sitemap: {}", sitemap_url);
         }
-        let content = fetch_url(&client, &sitemap_url, debug)?;
+        let content = fetch_url(&sitemap_url, debug)?;
         let count = count_urls(&content, debug)?;
         if debug {
             println!(
@@ -77,7 +72,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn fetch_url(_client: &reqwest::blocking::Client, url: &str, debug: bool) -> Result<String> {
+fn fetch_url(url: &str, debug: bool) -> Result<String> {
     use std::process::Command;
     
     // Build the curl command. We use "-s" for silent mode.
