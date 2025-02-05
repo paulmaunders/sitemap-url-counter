@@ -1,0 +1,11 @@
+[package]
+name = "sitemap-url-counter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reqwest = { version = "0.11", features = ["blocking", "cookies", "cookie_store"] }
+quick-xml = "0.31"
+indicatif = "0.17"
+url = "2.4"
+anyhow = "1.0"
